@@ -18,14 +18,17 @@
   --text-light:  #5C6B5E;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
 body {
   font-family: 'Open Sans', sans-serif;
   color: var(--text);
   background: var(--white);
   animation: pageIn .5s ease both;
+  overflow-x: hidden;
 }
-html, body { overflow-x: hidden; }
 
 @keyframes pageIn {
   from { opacity: 0; transform: translateY(8px); }
@@ -618,7 +621,7 @@ a   { text-decoration: none; color: inherit; }
   padding: 100px 0;
   background:
     linear-gradient(rgba(13,13,13,0.88), rgba(13,13,13,0.88)),
-    url('https://images.unsplash.com/photo-1529502669403-c073b74fcefb?w=1920&q=80') center / cover no-repeat;
+    url('https://images.unsplash.com/photo-1536329583941-14287ec6fc4e?w=1920&q=80') center / cover no-repeat;
   background-attachment: fixed, fixed;
 }
 
