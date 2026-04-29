@@ -916,8 +916,8 @@ a   { text-decoration: none; color: inherit; }
    ============================================================ */
 .wpp-float {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 40px;
+  right: 40px;
   z-index: 999;
   width: 58px; height: 58px;
   background: #25d366;
@@ -938,13 +938,14 @@ a   { text-decoration: none; color: inherit; }
   border-radius: 50%;
   border: 2px solid rgba(37,211,102,0.55);
   animation: wppPulse 2s ease-out infinite;
+  pointer-events: none;
 }
-.wpp-ring1 { width: 72px; height: 72px; animation-delay: 0s; }
-.wpp-ring2 { width: 90px; height: 90px; animation-delay: .5s; }
+.wpp-ring1 { width: 70px; height: 70px; animation-delay: 0s; }
+.wpp-ring2 { width: 86px; height: 86px; animation-delay: .5s; }
 
 @keyframes wppPulse {
-  0%   { transform: scale(0.8); opacity: .7; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0%   { transform: scale(0.85); opacity: .65; }
+  100% { transform: scale(1.38); opacity: 0; }
 }
 
 /* ============================================================
