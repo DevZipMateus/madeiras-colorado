@@ -1159,12 +1159,20 @@ a   { text-decoration: none; color: inherit; }
     background: rgba(10,10,10,0.99);
     backdrop-filter: blur(16px);
     padding: 0;
-    transform: translateY(-110%);
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s ease, visibility .3s;
     box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     border-top: 1px solid rgba(56,194,85,0.25);
+    pointer-events: none;
   }
-  #navMenu.open { transform: translateY(0); }
+  #navMenu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 
   /* Links — largura total, separador visual */
   #navMenu ul {
