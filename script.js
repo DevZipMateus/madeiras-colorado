@@ -19,11 +19,13 @@ if (menuToggle && navMenu) {
   menuToggle.addEventListener('click', () => {
     navMenu.classList.toggle('open');
     menuToggle.classList.toggle('active');
+    if (header) header.classList.toggle('menu-open');
   });
   navMenu.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       navMenu.classList.remove('open');
       menuToggle.classList.remove('active');
+      if (header) header.classList.remove('menu-open');
     });
   });
 }
