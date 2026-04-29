@@ -137,15 +137,25 @@ document.querySelectorAll('.stat-num').forEach(el => counterObserver.observe(el)
   setTimeout(type, 900);
 })();
 
-/* 8. SPOTLIGHT em cards de produtos */
+/* 8. SPOTLIGHT + TILT 3D em cards de produtos */
 document.querySelectorAll('.produto-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'box-shadow .3s';
+  });
   card.addEventListener('mousemove', e => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(26,123,42,0.07), #fff 65%)`;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = (x - cx) / cx;
+    const dy = (y - cy) / cy;
+    card.style.transform = `perspective(900px) rotateX(${-dy * 5}deg) rotateY(${dx * 5}deg) translateY(-6px)`;
+    card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(26,123,42,0.09), #fff 65%)`;
   });
   card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform .4s ease, box-shadow .3s, background .3s';
+    card.style.transform = '';
     card.style.background = '';
   });
 });
@@ -202,4 +212,62 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
     }
   });
+});
+
+/* 12. NAV LINK ATIVO por seção visível */
+(function () {
+  const sections  = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('#navMenu ul a');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`#navMenu ul a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(s => obs.observe(s));
+})();
+
+/* 13. PARALLAX na imagem do Sobre */
+(function () {
+  const wrap = document.querySelector('.sobre-img-wrap');
+  const img  = document.querySelector('.sobre-img');
+  if (!wrap || !img) return;
+
+  window.addEventListener('scroll', () => {
+    const rect = wrap.getBoundingClientRect();
+    const mid  = window.innerHeight / 2;
+    const diff = mid - (rect.top + rect.height / 2);
+    img.style.transform = `translateY(${diff * 0.07}px)`;
+  }, { passive: true });
+})();
+
+/* 14. BOTÃO VOLTAR AO TOPO */
+(function () {
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 500);
+  }, { passive: true });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+/* 15. CONTADOR DE STATS — glow ao atingir o alvo */
+document.querySelectorAll('.stat-num').forEach(el => {
+  const orig = el.dataset.target;
+  const obs  = new MutationObserver(() => {
+    if (el.textContent === orig) {
+      el.classList.add('stat-done');
+      obs.disconnect();
+    }
+  });
+  obs.observe(el, { childList: true });
 });
