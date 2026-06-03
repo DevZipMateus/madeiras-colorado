@@ -262,7 +262,65 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 })();
 
-/* 15. CONTADOR DE STATS — glow ao atingir o alvo */
+/* 15. GALERIA LIGHTBOX */
+(function () {
+  const items   = Array.from(document.querySelectorAll('.galeria-item img'));
+  const lb      = document.getElementById('lightbox');
+  const lbImg   = document.getElementById('lightboxImg');
+  if (!lb || !lbImg || !items.length) return;
+
+  const lbBg    = lb.querySelector('.lightbox-bg');
+  const btnClose = lb.querySelector('.lightbox-close');
+  const btnPrev  = lb.querySelector('.lightbox-prev');
+  const btnNext  = lb.querySelector('.lightbox-next');
+  let current = 0;
+
+  function open(i) {
+    current = i;
+    lbImg.src = items[i].src;
+    lbImg.alt = items[i].alt;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { lbImg.src = ''; }, 300);
+  }
+
+  function navigate(dir) {
+    current = (current + dir + items.length) % items.length;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = items[current].src;
+      lbImg.alt = items[current].alt;
+      lbImg.style.opacity = '1';
+    }, 160);
+  }
+
+  items.forEach((img, i) => img.parentElement.addEventListener('click', () => open(i)));
+  if (lbBg)     lbBg.addEventListener('click', close);
+  if (btnClose) btnClose.addEventListener('click', close);
+  if (btnPrev)  btnPrev.addEventListener('click', () => navigate(-1));
+  if (btnNext)  btnNext.addEventListener('click', () => navigate(1));
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+
+  let touchX = 0;
+  lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend',   e => {
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) navigate(diff > 0 ? 1 : -1);
+  });
+})();
+
+/* 17. CONTADOR DE STATS — glow ao atingir o alvo */
 document.querySelectorAll('.stat-num').forEach(el => {
   const orig = el.dataset.target;
   const obs  = new MutationObserver(() => {
